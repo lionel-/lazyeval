@@ -14,6 +14,14 @@ warn_text_se <- function() {
   warn("Text parsing is deprecated, please supply an expression or formula")
 }
 
+#' Convert lazyeval-compatible inputs to quosures
+#'
+#' @param lazy,dots,... Lazyeval-compatible inputs, e.g. formulas,
+#'   strings, lazy objects, etc.
+#' @param env A default environment for the returned quosure.
+#' @param warn Whether to issue a deprecation warning.
+#'
+#' @export
 compat_lazy <- function(lazy, env = caller_env(), warn = TRUE) {
   if (warn) warn_underscored()
 
@@ -46,6 +54,9 @@ compat_lazy <- function(lazy, env = caller_env(), warn = TRUE) {
   )
 }
 
+#' @rdname compat_lazy
+#' @param .named Whether to give default names to unnamed inputs.
+#' @export
 compat_lazy_dots <- function(dots, env, ..., .named = FALSE) {
   if (missing(dots)) {
     dots <- list()
@@ -73,12 +84,20 @@ compat_lazy_dots <- function(dots, env, ..., .named = FALSE) {
   dots
 }
 
+#' Convert tidyeval-compatible inputs to lazy objects
+#'
+#' @param quo A quosure.
+#'
+#' @export
 compat_as_lazy <- function(quo) {
   structure(class = "lazy", list(
     expr = get_expr(quo),
     env = get_env(quo)
   ))
 }
+#' @rdname compat_as_lazy
+#' @param ... Quasiquoted inputs.
+#' @export
 compat_as_lazy_dots <- function(...) {
   structure(class = "lazy_dots", map(quos(...), compat_as_lazy))
 }
