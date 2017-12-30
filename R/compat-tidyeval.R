@@ -28,7 +28,7 @@ compat_lazy <- function(lazy, env = caller_env(), warn = TRUE) {
     string = ,
     character = {
       if (warn) warn_text_se()
-      parse_quo(lazy[[1]], env)
+      new_quosure(parse_expr(lazy[[1]]), env)
     },
     logical = ,
     integer = ,
@@ -65,7 +65,7 @@ compat_lazy_dots <- function(dots, env, ..., .named = FALSE) {
 
   named <- have_name(dots)
   if (.named && any(!named)) {
-    nms <- map_chr(dots[!named], function(x) expr_text(get_expr(x)))
+    nms <- map_chr(dots[!named], function(x) rlang::expr_text(get_expr(x)))
     names(dots)[!named] <- nms
   }
 
@@ -75,8 +75,8 @@ compat_lazy_dots <- function(dots, env, ..., .named = FALSE) {
 
 compat_as_lazy <- function(quo) {
   structure(class = "lazy", list(
-    expr = quo_get_expr(quo),
-    env = quo_get_env(quo)
+    expr = get_expr(quo),
+    env = get_env(quo)
   ))
 }
 compat_as_lazy_dots <- function(...) {
