@@ -1,3 +1,5 @@
+#' @import rlang
+NULL
 
 warn_underscored <- function() {
   return(NULL)
