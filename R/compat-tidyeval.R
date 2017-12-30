@@ -30,6 +30,7 @@ compat_lazy <- function(lazy, env = caller_env(), warn = TRUE) {
   }
 
   coerce_type(lazy, "a quosure",
+    quosure = lazy,
     formula = as_quosure(lazy, env),
     symbol = ,
     language = new_quosure(lazy, env),
